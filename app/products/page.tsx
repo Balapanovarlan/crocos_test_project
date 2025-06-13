@@ -67,9 +67,18 @@ export default function Products() {
           )}
 
           {/* ——— CARD LIST ——— */}
-          <section className="xm:px-4 py-6">
-            <CardList />
-          </section>
+          {filtersOpen&& (
+            <section className="w-1/2 xm:px-4 py-6 xm:w-auto">
+              <CardList />
+            </section>
+          )}
+          {
+            !filtersOpen&&(
+            <section className="xm:px-4 py-6 ">
+              <CardList />
+            </section>
+            )
+          }
         </div>
       </main>
     </div>

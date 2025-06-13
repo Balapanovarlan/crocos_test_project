@@ -44,7 +44,7 @@ export default function SidebarProducts() {
                   <input
                     type="checkbox"
                     name="inStock"
-                    className="h-4 w-4"
+                    className="h-2.5 w-2.5 xm:h-4 xm:w-4"
                   />
                    <span className="text-xs xm:text-lg">Availability</span>
                 </label>
@@ -52,14 +52,14 @@ export default function SidebarProducts() {
                   <input
                     type="checkbox"
                     name="outOfStock"
-                    className="h-4 w-4"
+                    className="h-2.5 w-2.5 xm:h-4 xm:w-4"
                   />
                   <span className="text-xs xm:text-lg">Out of Stock</span>
                 </label>
               </div>
             ), },
           { id: "3", title: "Category", children:
-            <div>{categoryArr.map((item)=>(
+            <div className='flex flex-col gap-2'>{categoryArr.map((item)=>(
               <label key={item.title} className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -71,14 +71,14 @@ export default function SidebarProducts() {
             ))}</div>
            },
           { id: "4", title: "Colors", children:
-            <>
+            <div className='flex flex-col gap-2'>
               {colorsArr.map((item)=>(
-                <div className='flex items-center gap-1'>
+                <div key={item.title} className='flex items-center gap-1'>
                   <span style={{backgroundColor: item.hex}} className={`w-4 h-4`} />
                   <span className='text-xs xm:text-lg' >{item.title}</span>
                 </div>
               ))}
-            </>
+            </div>
            },
           { id: "5", title: "Price Range", children: <PriceSlider/> },
         ]}

@@ -10,7 +10,7 @@ const Search = () => {
         <form >
             <input type="text" 
             placeholder='Search'
-            className='text-right w-full'
+            className='text-right w-full text-xs xm:text-[16px]'
             />
         </form>
     </div>
