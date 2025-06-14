@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 export default function AboutSection() {
   return (
-    <section className="flex flex-col gap-5 pt-10">
+    <section id='about' className="flex flex-col gap-5 pt-10">
       <div className="flex flex-col items-center gap-3 font-beatrice">
         <h1 className="text-center text-5xl">Our Approach to fashion design</h1>
         <p className="w-full max-w-[685px] text-center">

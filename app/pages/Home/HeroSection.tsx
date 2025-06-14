@@ -5,11 +5,12 @@ import CardItem from "../../components/CardItem/CardItem";
 import { ArrowRight } from "lucide-react";
 import whiteShirt from '@/public/icons/black_tshirt.png'
 import blackShirt from '@/public/images/white_slim.png'
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
-    <>
-        <div className=" flex flex-col w-full gap-3.5">
+    <section id='home' className='flex flex-col justify-center gap-12 xm:gap-24'>
+      <div className=" flex flex-col w-full gap-3.5">
         <div className="flex flex-col gap-1">
           <span className="font-beatrice">MEN</span>
           <span>WOMEN</span>
@@ -17,7 +18,7 @@ const HeroSection = () => {
         </div>
         <Search/>
       </div>
-      <section className="flex flex-col items-center gap-14 font-beatrice xm:w-full xm:flex-row xm:justify-between">
+      <div className="flex flex-col items-center gap-14 font-beatrice xm:w-full xm:flex-row xm:justify-between">
         <div className="xm:flex xm:flex-col xm:gap-50 ">
           
           <div className="container ">
@@ -32,10 +33,10 @@ const HeroSection = () => {
               <CardItem/>
             </div>
 
-            <a href='/products' className="flex gap-2.5 pl-2.5 pr-5 py-2.5 bg-light-gray">
+            <Link href='/products' className="flex gap-2.5 pl-2.5 pr-5 py-2.5 bg-light-gray">
               <span className="capitalize">Go to shop</span>
               <ArrowRight/>
-            </a>
+            </Link>
             <div className="hidden xm:flex xm:gap-2 ">
               <button className="px-3.5 py-2 border">{'<'}</button>
               <button className="px-3.5 py-2 border">{'>'}</button>
@@ -47,9 +48,9 @@ const HeroSection = () => {
             <Image src={whiteShirt} alt="white" width={366}/>
             <Image src={blackShirt} alt="black" width={366}/>
           </div>
-      </section>
+      </div>
        
-    </>
+    </section>
   )
 }
 
