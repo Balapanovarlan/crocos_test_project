@@ -7,6 +7,7 @@ import Search from '../components/Search/Search'
 import CategoryList from '../components/CategoryList/CategoryList'
 import SidebarProducts from '../components/SidebarProducts/SidebarProducts'
 import CardList from '../components/CardLIst/CardList'
+import { products } from '@/mockdata'
 
 export default function Products() {
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -69,13 +70,13 @@ export default function Products() {
           {/* ——— CARD LIST ——— */}
           {filtersOpen&& (
             <section className="w-1/2 xm:px-4 py-6 xm:w-auto">
-              <CardList />
+              <CardList items={products} variant='products' />
             </section>
           )}
           {
             !filtersOpen&&(
             <section className="xm:px-4 py-6 ">
-              <CardList />
+              <CardList items={products} variant='products'/>
             </section>
             )
           }

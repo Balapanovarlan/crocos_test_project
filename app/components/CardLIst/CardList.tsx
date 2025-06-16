@@ -1,30 +1,30 @@
-import CardItem from "../CardItem/CardItem"
+// components/CardList.tsx
+import React from 'react'
+import CardItem, { CardProps } from '../CardItem/CardItem'
 
-const CardList = () => {
+
+type CardListProps = {
+  items: CardProps[]
+  variant?: 'products' | 'cart'
+  onRemoveItem?: (id: string) => void
+}
+
+export default function CardList({ items, variant = 'products', onRemoveItem }: CardListProps) {
   return (
-    <div 
-    className='flex justify-center flex-wrap gap-5 w-full max-w-[867px]'
+    <div
+      className={`
+        container flex flex-wrap justify-center gap-6
+        ${variant === 'products' ? '' : ''}
+      `}
     >
-        <a href="#">
-            <CardItem/>
-        </a>
-           <a href="#">
-            <CardItem/>
-        </a>
-           <a href="#">
-            <CardItem/>
-        </a>
-           <a href="#">
-            <CardItem/>
-        </a>
-           <a href="#">
-            <CardItem/>
-        </a>
-           <a href="#">
-            <CardItem/>
-        </a>
+      {items.map(item => (
+        <CardItem
+          key={item.id}
+          {...item}
+          variant={variant}
+          onRemove={variant === 'cart' ? onRemoveItem : undefined}
+        />
+      ))}
     </div>
   )
 }
-
-export default CardList
