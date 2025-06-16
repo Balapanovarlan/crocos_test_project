@@ -52,4 +52,16 @@ export const cartItems: CartItem[] = [
     color: '#1E90FF',
     size: 'M',
   },
+  {
+    ...products[3],
+    quantity: 1,
+    color: '#1E90FF',
+    size: 'M',
+  },
+  {
+    ...products[4],
+    quantity: 1,
+    color: '#1E90FF',
+    size: 'M',
+  },
 ]
