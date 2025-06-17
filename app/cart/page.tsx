@@ -1,5 +1,6 @@
 import { cartItems } from '@/mockdata'
 import CardList from '../components/CardLIst/CardList'
+import Link from 'next/link'
 
 export default function cartPage() {
   return (
@@ -30,7 +31,9 @@ export default function cartPage() {
               </div>
               <div>$190</div>
             </div>
-            <button className='uppercase bg-light-gray w-full py-3 hover:bg-gray-300 transition-colors duration-150 ease-in-out'>continue</button>
+            <Link href={'/checkout'}> 
+              <button className='uppercase bg-light-gray w-full py-3 hover:bg-gray-300 transition-colors duration-150 ease-in-out'>continue</button>
+            </Link>
           </div>
       </div>
     </div>

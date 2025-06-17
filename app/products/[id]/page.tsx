@@ -11,20 +11,20 @@ type ImageItem = {
 };
 
 export default function productDetail() {
-  // useEffect(()=>{
-  //     const testAPI = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/product/1`
-  //     )
-  //     console.log('Ответ сервера:', res.data)
-  //   } catch (error) {
-  //     console.error('Ошибка при запросе:', error)
-  //   }
-  // }
+  useEffect(()=>{
+      const testAPI = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8022/store/product/1`
+      )
+      console.log('Ответ сервера:', res.data)
+    } catch (error) {
+      console.error('Ошибка при запросе:', error)
+    }
+  }
 
-  // // testAPI()
-  // }, [])
+  testAPI()
+  }, [])
 
   const images: ImageItem[] = [
     { id: 1, src: "/images/product_1.png", alt: "Фото 1" },
