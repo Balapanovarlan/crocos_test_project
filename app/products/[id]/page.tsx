@@ -66,9 +66,9 @@ export default function productDetail() {
 
 
   return (
-			<div className="container m-auto font-beatrice flex gap-25 justify-center">
-				<div className="flex gap-4">
-					<div className="w-full min-w-[300px]  max-w-[500px] relative ">
+			<div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center">
+				<div className="flex flex-col xm:flex-row gap-4">
+					<div className="w-full min-w-[300px] min-h-[400px]  max-w-[500px] relative ">
 						<Image
 							src={images[activeIndex].src}
 							alt={images[activeIndex].alt}
@@ -78,7 +78,7 @@ export default function productDetail() {
 					</div>
 
 					{/* Лента миниатюр */}
-					<div className="flex flex-col justify-center gap-2">
+					<div className="flex xm:flex-col items-center justify-center gap-2">
 						{images.map((img, idx) => (
 							<button
 								key={img.id}
