@@ -13,7 +13,7 @@ export interface Product {
   name: string
   subtitle?: string
   price: number
-  imageUrl: string    // путь из public, например "/shirt1.jpg"
+  imageUrl: string    
 }
 
 /** Тип позиции в корзине */
@@ -21,4 +21,10 @@ export interface CartItem extends Product {
   quantity: number
   color?: string
   size?: string
+}
+
+export interface Category {
+  id: number
+  name: string
+  slug: string
 }

@@ -3,16 +3,20 @@ import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllCategories } from '@/app/utils/axios';
+import { Category } from '@/app/types/types';
 
-export const categoryArr = [
-  {title: 'T-Shirt'},
-  {title: 'Jeans'},
-  {title: 'Shorts'},
-  {title: 'Jackets'},
-]
-export default function CategoryList() {
+
+
+export default function CategoryList({categories}: {categories:Category[]}) {
+  
+  // const {data:categories = [], isLoading , isError } = useQuery<Category[], Error>( { queryKey:['categories'], queryFn: fetchAllCategories});
+  
+  // if (isLoading) return <p>Loading…</p>
+  // if (isError)   return <p>Error loading categories</p>
+  
+
   return (
     <div className=' w-full max-w-xl xm:min-w-3xs'>
 
@@ -22,13 +26,13 @@ export default function CategoryList() {
             spaceBetween = {20}
             slidesPerView = {3} 
         >
-            {categoryArr.map((item)=>(
+            {categories.map((item)=>(
                 <SwiperSlide>
                     <button className='border border-btn-gray py-1.5 xm:py-3 w-full max-w-25 xm:max-w-32 flex justify-center uppercase
                       hover:bg-btn-gray/30 active:border-black transition-colors duration-200 ease-in cursor-pointer
                     '>
                         <span className='text-[10px] xm:text-lg'>
-                        {item.title}
+                        {item.name}
                         </span>
                     </button>
                 </SwiperSlide>

@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import { Accordion } from '../Accordion/Accordion'
-import { categoryArr } from '../CategoryList/CategoryList'
 import PriceSlider from '../PriceSlider/PriceSlider';
 
 const colorsArr = [
@@ -58,18 +57,18 @@ export default function SidebarProducts() {
                 </label>
               </div>
             ), },
-          { id: "3", title: "Category", children:
-            <div className='flex flex-col gap-2'>{categoryArr.map((item)=>(
-              <label key={item.title} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name={item.title}
-                    className="h-4 w-4"
-                  />
-                  <span className="text-xs xm:text-lg">{item.title}</span>
-              </label>
-            ))}</div>
-           },
+          // { id: "3", title: "Category", children:
+          //   <div className='flex flex-col gap-2'>{categoryArr.map((item)=>(
+          //     <label key={item.title} className="flex items-center gap-2">
+          //         <input
+          //           type="checkbox"
+          //           name={item.title}
+          //           className="h-4 w-4"
+          //         />
+          //         <span className="text-xs xm:text-lg">{item.title}</span>
+          //     </label>
+          //   ))}</div>
+          //  },
           { id: "4", title: "Colors", children:
             <div className='flex flex-col gap-2'>
               {colorsArr.map((item)=>(

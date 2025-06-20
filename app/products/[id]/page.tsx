@@ -11,20 +11,18 @@ type ImageItem = {
 };
 
 export default function productDetail() {
-  useEffect(()=>{
-      const testAPI = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8022/store/product/1`
-      )
-      console.log('Ответ сервера:', res.data)
-    } catch (error) {
-      console.error('Ошибка при запросе:', error)
-    }
-  }
+  useEffect(() => {
+    const testAPI = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8022/store/product/4`);
+        console.log("Ответ сервера:", res.data);
+      } catch (error) {
+        console.error("Ошибка при запросе:", error);
+      }
+    };
 
-  testAPI()
-  }, [])
+    testAPI();
+  }, []);
 
   const images: ImageItem[] = [
     { id: 1, src: "/images/product_1.png", alt: "Фото 1" },
@@ -64,84 +62,85 @@ export default function productDetail() {
 
   const sizes = ["XS", "S", "M", "L", "XL", "2X"];
 
-
   return (
-			<div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center">
-				<div className="flex flex-col xm:flex-row gap-4">
-					<div className="w-full min-w-[300px] min-h-[400px]  max-w-[500px] relative ">
-						<Image
-							src={images[activeIndex].src}
-							alt={images[activeIndex].alt}
-							fill
-							className="object-contain"
-						/>
-					</div>
+    <div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center">
+      <div className="flex flex-col xm:flex-row gap-4">
+        <div className="w-full min-w-[300px] min-h-[400px]  max-w-[500px] relative ">
+          <Image
+            src={images[activeIndex].src}
+            alt={images[activeIndex].alt}
+            fill
+            className="object-contain"
+          />
+        </div>
 
-					{/* Лента миниатюр */}
-					<div className="flex xm:flex-col items-center justify-center gap-2">
-						{images.map((img, idx) => (
-							<button
-								key={img.id}
-								onClick={() => setActiveIndex(idx)}
-								className={`
+        {/* Лента миниатюр */}
+        <div className="flex xm:flex-col items-center justify-center gap-2">
+          {images.map((img, idx) => (
+            <button
+              key={img.id}
+              onClick={() => setActiveIndex(idx)}
+              className={`
 								relative
 								w-20 h-20
 								border
 								cursor-pointer
 								transition-opacity
 								${
-									idx === activeIndex
-										? "opacity-100 border-blue-500"
-										: "opacity-50 hover:opacity-75"
-								}
+                  idx === activeIndex
+                    ? "opacity-100 border-blue-500"
+                    : "opacity-50 hover:opacity-75"
+                }
 							`}
-							>
-								<Image
-									src={img.src}
-									alt={img.alt}
-									fill
-									className="object-cover"
-								/>
-							</button>
-						))}
-					</div>
-				</div>
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                className="object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
 
-				<div className="flex flex-col gap-4 w-full max-w-[306px] pt-14 px-10 pb-3 border border-light-gray">
-					<div>
-						<h1 className="uppercase">abstract print shirt</h1>
-						<span>$99</span>
-					</div>
-					<p>
-						Relaxed-fit shirt. Camp collar and short sleeves. Button-up front.
-					</p>
-					<div>
-						<h3 className="text-gray-300">Color</h3>
-						<div className="flex gap-0.5">
-							{colors.map((item) => (
-								<span
-									key={item.id}
-									style={{ backgroundColor: item.color }}
-									className="w-9 h-9"
-								/>
-							))}
-						</div>
-					</div>
-					<div>
-						<h3 className="text-gray-300">Size</h3>
-						<div className="flex items-center gap-1 max-w-3xs">
-							{sizes.map((item, index) => (
-								<span
-									key={index}
-									className="flex justify-center w-full py-2 border border-btn-gray"
-								>
-									{item}
-								</span>
-							))}
-						</div>
-					</div>
-					<button className="flex w-full justify-center py-3 bg-btn-gray hover:bg-btn-gray/40 transition-colors duration-150 ease-in-out">ADD</button>
-				</div>
-			</div>
+      <div className="flex flex-col gap-4 w-full max-w-[306px] pt-14 px-10 pb-3 border border-light-gray">
+        <div>
+          <h1 className="uppercase">abstract print shirt</h1>
+          <span>$99</span>
+        </div>
+        <p>
+          Relaxed-fit shirt. Camp collar and short sleeves. Button-up front.
+        </p>
+        <div>
+          <h3 className="text-gray-300">Color</h3>
+          <div className="flex gap-0.5">
+            {colors.map((item) => (
+              <span
+                key={item.id}
+                style={{ backgroundColor: item.color }}
+                className="w-9 h-9"
+              />
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-gray-300">Size</h3>
+          <div className="flex items-center gap-1 max-w-3xs">
+            {sizes.map((item, index) => (
+              <span
+                key={index}
+                className="flex justify-center w-full py-2 border border-btn-gray"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <button className="flex w-full justify-center py-3 bg-btn-gray hover:bg-btn-gray/40 transition-colors duration-150 ease-in-out">
+          ADD TO CART
+        </button>
+      </div>
+    </div>
   );
 }

@@ -1,12 +1,13 @@
 // components/CardList.tsx
 import React from 'react'
-import CardItem, { CardProps } from '../CardItem/CardItem'
+import { Product } from '@/app/types/product'
+import CardItem from '../CardItem/CardItem'
 
 
 type CardListProps = {
-  items: CardProps[]
+  items: Product[]
   variant?: 'products' | 'cart'
-  onRemoveItem?: (id: string) => void
+  onRemoveItem?: (id: number) => void
 }
 
 export default function CardList({ items, variant = 'products', onRemoveItem }: CardListProps) {
@@ -20,7 +21,7 @@ export default function CardList({ items, variant = 'products', onRemoveItem }: 
       {items.map(item => (
         <CardItem
           key={item.id}
-          {...item}
+          product={item}
           variant={variant}
           onRemove={variant === 'cart' ? onRemoveItem : undefined}
         />

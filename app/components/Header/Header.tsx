@@ -16,9 +16,6 @@ export const Header = ({ setIsOpen }: HeaderProps) => {
           <Image src={logo} alt="Logo" width={29} height={29} />
         </Link>
         <div className="flex items-center gap-1.5">
-          {/* <a href="" className='-rotate-45 bg-black p-[15px] rounded-full hover:bg-black/50 transition-colors duration-100 ease-in-out active:scale-105'>
-            <HeartIcon width={14} height={14} color='white'/>
-          </a> */}
           <Link
             href="/cart"
             className="border-[7px] border-black rounded-full active:scale-105"

@@ -1,58 +1,54 @@
 'use client'
 
+import { Product } from "@/app/types/product";
 import Link from "next/link";
 import React, { useState } from "react";
 
-export type CardProps = {
-  id: string;
-  name: string;
-  subtitle?: string;
-  price: number;
-  imageUrl: string;
-  variant?: "products" | "cart";
-  onRemove?: (id: string) => void;
-  quantity?: number;
-  color?: string;
-  size?: string;
-};
+export type Variant = 'products' | 'cart'
+
+export interface CardItemProps {
+  product: Product              
+  variant?: Variant            
+  onRemove?: (id: number) => void
+  quantity?: number
+  color?: string              
+  size?: string                 
+  onQuantityChange?: (id: number, newQty: number) => void
+}
 
 export default function CardItem({
-  id,
-  name,
-  subtitle,
-  price,
-  imageUrl,
-  variant = "products",
+  product,
+  variant = 'products',
   onRemove,
   quantity = 1,
   color,
   size,
   onQuantityChange,
-}: CardProps & { onQuantityChange?: (id: string, newQuantity: number) => void }) {
+}: CardItemProps ) {
 
   const [localQuantity, setLocalQuantity] = useState(quantity);
 
   const handleIncrease = () => {
     const newQuantity = localQuantity + 1;
     setLocalQuantity(newQuantity);
-    onQuantityChange && onQuantityChange(id, newQuantity);
+    onQuantityChange && onQuantityChange(product.id, newQuantity);
   };
 
   const handleDecrease = () => {
     if (localQuantity > 1) {
       const newQuantity = localQuantity - 1;
       setLocalQuantity(newQuantity);
-      onQuantityChange && onQuantityChange(id, newQuantity);
+      onQuantityChange && onQuantityChange(product.id, newQuantity);
     }
   };
 
-  const addToCart = (id : string) => {
+  const addToCart = (id : number) => {
     console.log(id);
     
   }
 
   return (
-    <Link href={`/products/${id}`}>
+    <Link href={`/products/${product.id}`}>
     
       <div
         className={`
@@ -63,7 +59,7 @@ export default function CardItem({
         {/* Если корзина — показываем кнопку X */}
         {variant === "cart" && onRemove && (
           <button
-            onClick={() => onRemove(id)}
+            onClick={() => onRemove(product.id)}
             className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
           >
             ×
@@ -73,8 +69,8 @@ export default function CardItem({
         <div className="flex flex-col gap-2.5 ">
           {/* Изображение */}
           <img
-            src={imageUrl}
-            alt={name}
+            src={product.main_image}
+            alt={product.title}
             className={
               "w-full max-w-[265px]  object-cover"
             }
@@ -86,19 +82,19 @@ export default function CardItem({
             }  flex flex-col gap-2.5`}
           >
             <div>
-              <h3 className="text-[14px] text-black/66">{name}</h3>
-              {subtitle && <p className="text-lg ">{subtitle}</p>}
+              <h3 className="text-[14px] text-black/66">{product.title}</h3>
+              {/* {subtitle && <p className="text-lg ">{subtitle}</p>} */}
             </div>
 
             <div className=" flex items-center justify-between">
-              <span className="font-bold">${price}</span>
+              <span className="font-bold">${product.price}</span>
               {/* В каталоге можно, например, добавить в корзину */}
               {variant === "products" && (
                 <button className="px-3 py-1 bg-black/80 text-white text-sm rounded hover:bg-gray-800"
                   onClick={e => {
                     e.preventDefault()      // отменяем переход
                     e.stopPropagation()     // не даём событию всплыть к Link
-                    addToCart(id) 
+                    addToCart(product.id) 
                   }}
                 >
                   Add to Cart

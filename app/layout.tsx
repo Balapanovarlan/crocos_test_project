@@ -5,6 +5,8 @@ import Footer from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
 import { useState } from "react";
 import SidebarMain from "./components/SidebarMain/SidebarMain";
+import { AuthProvider } from "./context/AuthContext";
+import { Providers } from "./providers";
 
 const beatrice = localFont({
   src: "../public/fonts/beatrice-deck-trial/BeatriceDeckTRIAL.otf",
@@ -19,15 +21,19 @@ export default function RootLayout({
 }>) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <html lang="en">
-      <body
-        className={`${beatrice.variable} antialiased bg-[url(../public/images/noisy_background.png)]`}
-      >
-        <Header setIsOpen={setIsOpen} />
-        <SidebarMain isOpen={isOpen} setIsOpen={setIsOpen} />
-        <main className=" pb-20">{children}</main>
-        <Footer />
-      </body>
-    </html>
+    // <AuthProvider>
+      <html lang="en">
+        <body
+          className={`${beatrice.variable} antialiased bg-[url(../public/images/noisy_background.png)]`}
+        >
+          <Providers>
+            <Header setIsOpen={setIsOpen} />
+            <SidebarMain isOpen={isOpen} setIsOpen={setIsOpen} />
+            <main className=" pb-20">{children}</main>
+            <Footer />
+          </Providers>
+        </body>
+      </html>
+    // </AuthProvider>
   );
 }

@@ -7,10 +7,20 @@ import Search from '../components/Search/Search'
 import CategoryList from '../components/CategoryList/CategoryList'
 import SidebarProducts from '../components/SidebarProducts/SidebarProducts'
 import CardList from '../components/CardLIst/CardList'
-import { products } from '@/mockdata'
+import { useQuery } from '@tanstack/react-query'
+import { Category } from '../types/types'
+import { fetchAllCategories, fetchAllProducts } from '../utils/axios'
+import { Product } from '../types/product'
 
 export default function Products() {
   const [filtersOpen, setFiltersOpen] = useState(false)
+
+  const {data:categories = [], isLoading : categoriesIsLoading , isError: categoriesIsError } = useQuery<Category[], Error>( { queryKey:['categories'], queryFn: fetchAllCategories});
+
+  const {data: products = [], isLoading : productsIsLoading , isError : productsIsError } = useQuery<Product[], Error >({queryKey:['products'], queryFn: fetchAllProducts}); 
+  
+  if (categoriesIsLoading || productsIsLoading) return <p>Loading…</p>
+  if (categoriesIsLoading || productsIsLoading)   return <p>Error loading categories</p>
 
   return (
     <div className="flex flex-col xm:flex-row font-beatrice">
@@ -48,13 +58,13 @@ export default function Products() {
             <span>{filtersOpen ? 'Close filter' : 'Open filter'}</span>
           </button>
           <div className='flex justify-center xm:hidden'>
-            <CategoryList />
+            <CategoryList categories = {categories}/>
           </div>     
           <div className='hidden xm:block'>
             <Search />
           </div>    
           <div className="hidden xm:block">
-            <CategoryList />
+            <CategoryList categories={categories}/>
           </div>  
           {/* Кнопка открытия/закрытия */}
         </div>

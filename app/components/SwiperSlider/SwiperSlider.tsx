@@ -41,6 +41,8 @@ const SwiperSlider = () => {
           },
         }}
       >
+
+        
         <SwiperSlide>
           <div className="flex flex-col gap-3.5 w-full max-w-[305px]">
             <Image src={shirtThird} alt=" " />
