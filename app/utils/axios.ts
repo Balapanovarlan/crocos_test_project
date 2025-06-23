@@ -9,7 +9,6 @@ export const api = axios.create({
   },
 })
 
-
 export const fetchAllCategories = async (): Promise<Category[]> => {
   const {data} = await api.get<Category[]>('/store/categories/');
   return data;
@@ -19,3 +18,14 @@ export const fetchAllProducts = async (): Promise<Product[]> => {
   const {data} = await api.get<Product[]>('/store/products/');
   return data;
 }
+
+export const fetchProductDetail = async ( id : number): Promise<Product> => {
+  const {data} = await api.get<Product>(`/store/products/${id}`);
+  return data;
+}
+
+export const fetchSearchResult = async (q : string) : Promise<Product[]> => {
+  const {data} = await api.get<Product[]>(`/store/search/?q=${q}`);
+  return data;
+}
+

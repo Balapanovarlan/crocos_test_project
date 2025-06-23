@@ -19,6 +19,7 @@ export default function Products() {
 
   const {data: products = [], isLoading : productsIsLoading , isError : productsIsError } = useQuery<Product[], Error >({queryKey:['products'], queryFn: fetchAllProducts}); 
   
+
   if (categoriesIsLoading || productsIsLoading) return <p>Loading…</p>
   if (categoriesIsLoading || productsIsLoading)   return <p>Error loading categories</p>
 

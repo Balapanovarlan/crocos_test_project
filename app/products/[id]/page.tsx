@@ -1,74 +1,38 @@
 "use client";
 
-import axios from "axios";
+import { Product } from "@/app/types/product";
+import { fetchProductDetail } from "@/app/utils/axios";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
-type ImageItem = {
-  id: number;
-  src: string;
-  alt: string;
-};
 
 export default function productDetail() {
-  useEffect(() => {
-    const testAPI = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8022/store/product/4`);
-        console.log("Ответ сервера:", res.data);
-      } catch (error) {
-        console.error("Ошибка при запросе:", error);
-      }
-    };
 
-    testAPI();
-  }, []);
+  const {id}= useParams()
 
-  const images: ImageItem[] = [
-    { id: 1, src: "/images/product_1.png", alt: "Фото 1" },
-    { id: 2, src: "/images/product_2.png", alt: "Фото 2" },
-    { id: 3, src: "/images/product_3.png", alt: "Фото 3" },
-    { id: 4, src: "/images/product_4.png", alt: "Фото 4" },
-  ];
+  const productId = Number(id)
+
+  const {data: productDetail,  isLoading , isError} = useQuery<Product>({queryKey:['product', productId], queryFn: ()=> fetchProductDetail(productId)}); 
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const colors = [
-    {
-      id: "1",
-      color: "#000000",
-    },
-    {
-      id: "2",
-      color: "#A9A9A9",
-    },
-    {
-      id: "3",
-      color: "#000000",
-    },
-    {
-      id: "4",
-      color: "#A6D6CA",
-    },
-    {
-      id: "5",
-      color: "#000000",
-    },
-    {
-      id: "6",
-      color: "#B9C1E8",
-    },
-  ];
+  if (isLoading) {
+    return <p>Loading</p>
+  }
 
-  const sizes = ["XS", "S", "M", "L", "XL", "2X"];
+  if (isError) {
+    return <p>is Error</p>
+  }
 
   return (
-    <div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center">
+    <div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center xm:pt-10">
       <div className="flex flex-col xm:flex-row gap-4">
-        <div className="w-full min-w-[300px] min-h-[400px]  max-w-[500px] relative ">
+        <div className="w-full min-w-[400px] min-h-[400px]  max-w-[500px] relative ">
           <Image
-            src={images[activeIndex].src}
-            alt={images[activeIndex].alt}
+            src={productDetail!.images[activeIndex].image}
+            alt='Selected image'
             fill
             className="object-contain"
           />
@@ -76,7 +40,7 @@ export default function productDetail() {
 
         {/* Лента миниатюр */}
         <div className="flex xm:flex-col items-center justify-center gap-2">
-          {images.map((img, idx) => (
+          {productDetail?.images.map((img, idx) => (
             <button
               key={img.id}
               onClick={() => setActiveIndex(idx)}
@@ -94,8 +58,8 @@ export default function productDetail() {
 							`}
             >
               <Image
-                src={img.src}
-                alt={img.alt}
+                src={img.image}
+                alt={'#'}
                 fill
                 className="object-cover"
               />
@@ -106,16 +70,16 @@ export default function productDetail() {
 
       <div className="flex flex-col gap-4 w-full max-w-[306px] pt-14 px-10 pb-3 border border-light-gray">
         <div>
-          <h1 className="uppercase">abstract print shirt</h1>
-          <span>$99</span>
+          <h1 className="uppercase">{productDetail?.title}</h1>
+          <span>{productDetail?.price}</span>
         </div>
         <p>
-          Relaxed-fit shirt. Camp collar and short sleeves. Button-up front.
+          {productDetail?.description}
         </p>
-        <div>
+        {/* <div>
           <h3 className="text-gray-300">Color</h3>
           <div className="flex gap-0.5">
-            {colors.map((item) => (
+            {productDetail?.color.map((item) => (
               <span
                 key={item.id}
                 style={{ backgroundColor: item.color }}
@@ -123,16 +87,16 @@ export default function productDetail() {
               />
             ))}
           </div>
-        </div>
+        </div> */}
         <div>
           <h3 className="text-gray-300">Size</h3>
           <div className="flex items-center gap-1 max-w-3xs">
-            {sizes.map((item, index) => (
+            {productDetail?.sizes.map((item, index) => (
               <span
                 key={index}
                 className="flex justify-center w-full py-2 border border-btn-gray"
               >
-                {item}
+                {item.name}
               </span>
             ))}
           </div>

@@ -29,7 +29,7 @@ export default function RootLayout({
           <Providers>
             <Header setIsOpen={setIsOpen} />
             <SidebarMain isOpen={isOpen} setIsOpen={setIsOpen} />
-            <main className=" pb-20">{children}</main>
+            <main className="pb-20">{children}</main>
             <Footer />
           </Providers>
         </body>
