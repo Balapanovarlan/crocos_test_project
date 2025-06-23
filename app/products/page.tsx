@@ -11,13 +11,28 @@ import { useQuery } from '@tanstack/react-query'
 import { Category } from '../types/types'
 import { fetchAllCategories, fetchAllProducts } from '../utils/axios'
 import { Product } from '../types/product'
+import { useSearchParams } from 'next/navigation'
 
 export default function Products() {
+
+  const params = useSearchParams();
+  const categoriesParams = params.getAll('category');
+  const sizesParams = params.getAll('sizes');
+  const colorParams = params.getAll('color')
+
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const {data:categories = [], isLoading : categoriesIsLoading , isError: categoriesIsError } = useQuery<Category[], Error>( { queryKey:['categories'], queryFn: fetchAllCategories});
 
-  const {data: products = [], isLoading : productsIsLoading , isError : productsIsError } = useQuery<Product[], Error >({queryKey:['products'], queryFn: fetchAllProducts}); 
+  const {data: products = [], isLoading : productsIsLoading , isError : productsIsError } =
+   useQuery<Product[], Error >(
+    {
+      queryKey:['products', categoriesParams, sizesParams, colorParams], 
+      queryFn: () => fetchAllProducts({
+        sizes: sizesParams,
+        color: colorParams,
+      }),
+    }); 
   
 
   if (categoriesIsLoading || productsIsLoading) return <p>Loading…</p>

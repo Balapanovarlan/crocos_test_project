@@ -1,22 +1,54 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Accordion } from '../Accordion/Accordion'
 import PriceSlider from '../PriceSlider/PriceSlider';
-
-const colorsArr = [
-    { title: 'White',   hex: '#FFFFFF' },
-    { title: 'Black',   hex: '#000000' },
-    { title: 'Red',     hex: '#FF0000' },
-    { title: 'Green',   hex: '#00FF00' },
-    { title: 'Blue',    hex: '#0000FF' },
-    { title: 'Yellow',  hex: '#FFFF00' },
-    { title: 'Cyan',    hex: '#00FFFF' },
-    { title: 'Magenta', hex: '#FF00FF' },
-    { title: 'Orange',  hex: '#FFA500' },
-    { title: 'Gray',    hex: '#808080' },
-];
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { FilterOptions } from '@/app/types/types';
+import { fetchFilterOptions } from '@/app/utils/axios';
 
 export default function SidebarProducts() {
+
+  const router = useRouter()
+  const params = useSearchParams()
+
+  const [selectedCategories , setSelectedCategories] = useState<string[]>([])
+  const [selectedSizes , setSelectedSizes] = useState<string[]>([])
+  const [selectedColor , setSelectedColor] = useState<string|null>(null)
+  const [priceMin, setPriceMin] = useState<number>(0)
+  const [priceMax, setPriceMax] = useState<number>(500)
+
+  const {data: options, isLoading} = useQuery<FilterOptions>({queryKey: ['filterOptions'], queryFn: fetchFilterOptions})
+
+  useEffect(() => {
+    setSelectedCategories(params.getAll('category'))
+    setSelectedSizes(params.getAll('sizes'))
+    setSelectedColor(params.get('color'))
+    const min = params.get('price_min')
+    const max = params.get('price_max')
+    setPriceMin(min ? Number(min) : 0)
+    setPriceMax(max ? Number(max): 500)
+  }, [params])
+  
+  const toggle = (arr: string[], set: (v: string[]) => void, val: string) =>{
+    set(arr.includes(val)
+      ? arr.filter(x => x !== val)
+      : [...arr, val])
+  }
+
+  const apply = () => {
+    const q = new URLSearchParams()
+    selectedCategories.forEach(c => q.append('category', c))
+    selectedSizes     .forEach(s => q.append('sizes',    s))
+    if(selectedColor) q.append('color', selectedColor)
+    if(priceMin!=null) q.append('price_min', String(priceMin))
+    if(priceMax!=null) q.append('price_max', String(priceMax))
+    router.push(`/products/?${q.toString()}`)
+  }
+
+  if (isLoading) return <p>Loading filters...</p>
+  
   return (
     <div>
         <Accordion
@@ -24,15 +56,17 @@ export default function SidebarProducts() {
         items={[
           { id: "1", title: "Size", children: (
               <div className="flex flex-wrap gap-2 mt-2">
-                {['XS', 'S', 'M', 'L', 'XL', '2XL'].map(size => (
-                  <label key={size} className="flex items-center gap-1">
+                {options?.sizes.map(size => (
+                  <label key={size.slug} className="flex items-center gap-1">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="size"
-                      value={size}
+                      checked = {selectedSizes.includes(size.slug)}
+                      value={size.name}
                       className="h-4 w-4"
+                      onChange={()=>toggle(selectedSizes, setSelectedSizes, size.slug)}
                     />
-                     <span className="text-xs xm:text-lg">{size}</span>
+                     <span className="text-xs xm:text-lg">{size.name}</span>
                   </label>
                 ))}
               </div>
@@ -57,31 +91,53 @@ export default function SidebarProducts() {
                 </label>
               </div>
             ), },
-          // { id: "3", title: "Category", children:
-          //   <div className='flex flex-col gap-2'>{categoryArr.map((item)=>(
-          //     <label key={item.title} className="flex items-center gap-2">
-          //         <input
-          //           type="checkbox"
-          //           name={item.title}
-          //           className="h-4 w-4"
-          //         />
-          //         <span className="text-xs xm:text-lg">{item.title}</span>
-          //     </label>
-          //   ))}</div>
-          //  },
-          { id: "4", title: "Colors", children:
-            <div className='flex flex-col gap-2'>
-              {colorsArr.map((item)=>(
-                <div key={item.title} className='flex items-center gap-1'>
-                  <span style={{backgroundColor: item.hex}} className={`w-4 h-4`} />
-                  <span className='text-xs xm:text-lg' >{item.title}</span>
-                </div>
-              ))}
-            </div>
+          { id: "3", title: "Colors", children:
+            (
+              <div className="flex gap-2 mt-2">
+                {options?.colors.map(([slug, label]) => (
+                  <label
+                    key={slug}
+                    className={`cursor-pointer p-1 border rounded ${
+                      selectedColor === slug ? 'ring-2 ring-blue-500' : ''
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="color"
+                      className="hidden"
+                      value={slug}
+                      checked={selectedColor === slug}
+                      onChange={() => setSelectedColor(slug)}
+                    />
+                    <span
+                      className="inline-block w-4 h-4"
+                      style={{ backgroundColor: slug }}
+                    />
+                    <span className="ml-1">{label}</span>
+                  </label>
+                ))}
+              </div>
+            )
            },
-          { id: "5", title: "Price Range", children: <PriceSlider/> },
+          { id: "4", title: "Price Range", children:
+             <PriceSlider
+              min={0}
+              max={500}
+              step={10}
+              value={[priceMin, priceMax]}
+              onValueChange={([min, max])=>{
+                setPriceMin(min)
+                setPriceMax(max)
+              }}
+             />
+            
+          },
         ]}
       />
+      <div className='pl-4 mt-4'>
+        <button onClick={apply}
+        className='text-lg py-2 px-4 bg-btn-gray hover:bg-btn-gray/40 transition-colors '>Select Filter</button>
+      </div>
     </div>
   )
 }

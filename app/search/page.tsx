@@ -27,7 +27,6 @@ export default function SearchPage() {
 			return <p>Error</p>
 		}
 
-
   return (
     <div className="font-beatrice flex flex-col items-center gap-10 pt-10	">
 			<Search/>

@@ -28,3 +28,10 @@ export interface Category {
   name: string
   slug: string
 }
+
+
+export interface FilterOptions {
+  colors: [string, string][]        
+  sizes: { slug: string; name: string }[]
+  categories: { id: number; name: string }[]
+}
