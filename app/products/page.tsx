@@ -16,9 +16,12 @@ import { useSearchParams } from 'next/navigation'
 export default function Products() {
 
   const params = useSearchParams();
-  const categoriesParams = params.getAll('category');
   const sizesParams = params.getAll('sizes');
-  const colorParams = params.getAll('color')
+  const colorParams = params.get('color');
+  const priceMinParams = Number(params.get('price_min')?? 0)
+  const priceMaxParams = Number(params.get('price_max')?? 500)
+
+
 
   const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -27,10 +30,12 @@ export default function Products() {
   const {data: products = [], isLoading : productsIsLoading , isError : productsIsError } =
    useQuery<Product[], Error >(
     {
-      queryKey:['products', categoriesParams, sizesParams, colorParams], 
+      queryKey:['products', sizesParams, colorParams, priceMinParams, priceMaxParams], 
       queryFn: () => fetchAllProducts({
         sizes: sizesParams,
-        color: colorParams,
+        color: colorParams? [colorParams] : undefined,
+        price_min: priceMinParams,
+        price_max: priceMaxParams,
       }),
     }); 
   

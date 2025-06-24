@@ -136,7 +136,7 @@ export default function SidebarProducts() {
       />
       <div className='pl-4 mt-4'>
         <button onClick={apply}
-        className='text-lg py-2 px-4 bg-btn-gray hover:bg-btn-gray/40 transition-colors '>Select Filter</button>
+        className='text-lg py-2 px-4 bg-btn-gray hover:bg-btn-gray/40 transition-colors '>Apply Filter</button>
       </div>
     </div>
   )
