@@ -93,12 +93,15 @@ export default function SidebarProducts() {
             ), },
           { id: "3", title: "Colors", children:
             (
-              <div className="flex gap-2 mt-2">
+              <div className=" flex flex-wrap gap-2 mt-2 ">
+                <button className='w-20 text-sm border-transparent rounded hover:ring-2 active:ring-gray-700'
+                  onClick={()=> setSelectedColor(null)}
+                >All</button>
                 {options?.colors.map(([slug, label]) => (
                   <label
                     key={slug}
-                    className={`cursor-pointer p-1 border rounded ${
-                      selectedColor === slug ? 'ring-2 ring-blue-500' : ''
+                    className={`flex items-center justify-center w-20 cursor-pointer p-1 border-transparent rounded ${
+                      selectedColor === slug ? 'ring-2 ring-gray-700' : ''
                     }`}
                   >
                     <input

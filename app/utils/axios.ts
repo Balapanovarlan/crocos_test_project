@@ -15,6 +15,7 @@ export const fetchAllCategories = async (): Promise<Category[]> => {
 }
 
 type Filters = {
+  category?:number
   sizes?: string[]
   color?: string[]
   price_min?: number
@@ -25,6 +26,8 @@ export async function fetchAllProducts(filters: Filters = {}): Promise<Product[]
   // Собираем параметры только для тех фильтров, что не пусты
   const params = new URLSearchParams()
  
+  if(filters.category) params.append('category',String(filters.category))
+
   if (filters.sizes) {
     filters.sizes.forEach(s => params.append('sizes', s))
   }
@@ -62,12 +65,11 @@ export const fetchFilterOptions = async () : Promise<FilterOptions> =>{
 }
 
 export const fetchProducts = async(filters: {
-  category?: string[]
+  category?: string
   sizes?: string[]
   color?: string[]
 }) : Promise<Product[]> => {
   const params = new URLSearchParams()
-  filters.category?.forEach(c => params.append('category', c))
   filters.sizes?.forEach(s => params.append('sizes', s))
   filters.color?.forEach(c => params.append('color', c))
   const {data} = await api.get(`/store/products/?${params.toString()}`);
