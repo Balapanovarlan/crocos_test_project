@@ -1,12 +1,16 @@
 import axios from 'axios'
-import { Category, FilterOptions } from '../types/types';
+import { Cart, AddToCartRequest, Category, FilterOptions, CartItemResponse, RegisterRequest } from '../types/types';
 import { Product } from '../types/product';
+import { access } from 'fs';
 
-export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_BASE_URL })
+
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 export const fetchAllCategories = async (): Promise<Category[]> => {
@@ -74,4 +78,45 @@ export const fetchProducts = async(filters: {
   filters.color?.forEach(c => params.append('color', c))
   const {data} = await api.get(`/store/products/?${params.toString()}`);
   return data;
+}
+
+
+export const fetchRegister = async (registerData : RegisterRequest) : Promise<any> =>
+{
+  const {data} = await api.post(`auth/register/`, {
+    username: `${registerData.username}`,
+    email: `${registerData.email}` ,
+    password: `${registerData.password}`,
+  })
+  return data;
+}
+
+
+export const fetchLogin = async (loginData : {
+  username: string,
+  password: string,
+}) => 
+{
+  const {data} = await api.post(`auth/login/`, {
+    username : `${loginData.username}`,
+    password : `${loginData.password}`,
+  })
+  return data;
+}
+
+
+export async function fetchCart(): Promise<Cart> {
+  const { data } = await api.get<Cart>('/store/cart/');
+  return data;
+}
+
+
+export const fetchAddToCart = async (
+  payload: AddToCartRequest
+): Promise<CartItemResponse> => {
+  const { data } = await api.post<CartItemResponse>(
+    '/store/cart/add/',
+    payload
+  )
+  return data
 }

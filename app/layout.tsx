@@ -21,7 +21,6 @@ export default function RootLayout({
 }>) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    // <AuthProvider>
       <html lang="en">
         <body
           className={`${beatrice.variable} antialiased bg-[url(../public/images/noisy_background.png)]`}
@@ -34,6 +33,5 @@ export default function RootLayout({
           </Providers>
         </body>
       </html>
-    // </AuthProvider>
   );
 }

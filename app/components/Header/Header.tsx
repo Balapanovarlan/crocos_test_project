@@ -9,7 +9,7 @@ export const Header = ({ setIsOpen }: HeaderProps) => {
   return (
     <header className="py-7 px-4.5 relative">
       <div className="flex items-center justify-between">
-        <button onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <button onClick={() => setIsOpen(true)} className="cursor-pointer p-1">
           <Image src={burgerMenuIcon} alt="Menu" />
         </button>
         <Link href="/" className="absolute left-1/2 transform -translate-x-1/2">
@@ -25,7 +25,7 @@ export const Header = ({ setIsOpen }: HeaderProps) => {
             </div>
           </Link>
           <Link
-            href=""
+            href="/login"
             className="bg-black p-[15px] text-white  rounded-full 
           hover:bg-black/50 transition-colors duration-100 ease-in-out 
             active:scale-105

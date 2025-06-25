@@ -2,31 +2,40 @@
 
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAuth } from '@/app/context/useAuth'
+import { useAuth } from '@/app/hooks/useAuth'
 import { useRouter } from 'next/navigation'
+import { fetchRegister } from '@/app/utils/axios'
+import { RegisterRequest } from '../types/types'
 
-type RegisterForm = { email: string; password: string; confirm: string }
+type RegisterForm = {
+  username: string
+  password: string
+  confirm: string
+}
 
 export default function RegisterPage() {
-  const { login } = useAuth()  // если бек отдаёт залогиненного юзера сразу
+  const { login } = useAuth()
   const router = useRouter()
   const [error, setError] = useState<string>()
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterForm>()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<RegisterForm>()
 
-  const onSubmit = async ({ email, password }: RegisterForm) => {
+  const onSubmit = async ({ username, password }: RegisterForm) => {
     try {
-      // Вы можете иметь отдельный API /api/auth/register
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-      if (!res.ok) throw new Error('Registration failed')
-      // После регистрации сразу логиним
-      await login(email, password)
+      // 1) Регистрируем пользователя
+      await fetchRegister({ username, password } as RegisterRequest)
+
+      // 2) Автоматически логинимся тем же username/password
+      await login(username, password)
+
+      // 3) Переходим куда нужно
       router.push('/')
     } catch (e: any) {
-      setError(e.message)
+      setError(e.message || 'Registration failed')
     }
   }
 
@@ -35,13 +44,13 @@ export default function RegisterPage() {
       <h1 className="text-2xl mb-4">Register</h1>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <label className="block mb-2">
-          Email
+          Username
           <input
-            type="email"
-            {...register('email', { required: 'Email is required' })}
+            type="text"
+            {...register('username', { required: 'Username is required' })}
             className="mt-1 w-full border rounded p-2"
           />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          {errors.username && <p className="text-red-500">{errors.username.message}</p>}
         </label>
 
         <label className="block mb-2">
