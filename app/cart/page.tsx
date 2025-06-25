@@ -10,20 +10,20 @@ import { useRouter } from 'next/navigation'
 import type { Cart, CartItem } from '../types/types'
 
 export default function CartPage() {
-  const { token } = useAuth()
+  const { access:token , initializing} = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!token) router.replace('/login')
-  }, [token, router])
+    if (!initializing && !token) router.replace('/login')
+  }, [initializing,token, router])
 
   const { data, isLoading, isError } = useQuery<Cart>({
     queryKey: ['cart'],
     queryFn: fetchCart,
-    enabled: !!token,
+    enabled: !!token && !initializing,
   })
 
-  if (isLoading) return <p>Loading…</p>
+  if (initializing || isLoading) return <p>Loading…</p>
   if (isError || !data) return <p>Error loading cart</p>
 
   // Получаем массив CartItem[]

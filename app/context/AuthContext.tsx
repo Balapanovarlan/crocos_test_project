@@ -1,43 +1,75 @@
-'use client';
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { fetchLogin } from '../utils/axios';
+// src/app/context/AuthContext.tsx
+'use client'
+import React, { createContext, useState, useEffect, ReactNode } from 'react'
+import { fetchLogin, fetchRefresh } from '../utils/axios'
+import { LoginRequest, LoginResponse } from '../types/types'
 
-interface AuthContextProps {
-  token: string | null;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+interface AuthContextType {
+  access: string | null
+  login: (username: string, password: string) => Promise<void>
+  logout: () => void
+  initializing: boolean
 }
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [access, setAccess] = useState<string | null>(null)
+  const [refresh, setRefresh] = useState<string | null>(null)
+  const [initializing, setInitializing] = useState(true)
 
-  // При монтировании читаем токен из localStorage
+  // При старте читаем их из localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('token');
-    if (saved) setToken(saved);
-    setLoading(false);
-  }, []);
+    const savedAccess = localStorage.getItem('accessToken')
+    const savedRefresh = localStorage.getItem('refreshToken')
+    setAccess(savedAccess)
+    setRefresh(savedRefresh)
+
+    // Если у нас есть refresh, но нет/просрочен access — пробуем обновить
+    if (!savedAccess && savedRefresh) {
+      fetchRefresh({ refresh: savedRefresh })
+        .then((data) => {
+          setAccess(data.access)
+          localStorage.setItem('accessToken', data.access)
+          // если бек отдаёт новый refresh — обновите и его
+          if (data.refresh) {
+            setRefresh(data.refresh)
+            localStorage.setItem('refreshToken', data.refresh)
+          }
+        })
+        .catch(() => {
+          // не смогли обновить — сбрасываем всё
+          setAccess(null)
+          setRefresh(null)
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+        })
+        .finally(() => {
+          setInitializing(false)
+        })
+    } else {
+      setInitializing(false)
+    }
+  }, [])
 
   const login = async (username: string, password: string) => {
-    const data = await fetchLogin({ username, password });
-    setToken(data.access);
-    localStorage.setItem('token', data.access);
-  };
+    const data: LoginResponse = await fetchLogin({ username, password } as LoginRequest)
+    setAccess(data.access)
+    setRefresh(data.refresh)
+    localStorage.setItem('accessToken', data.access)
+    localStorage.setItem('refreshToken', data.refresh)
+  }
 
   const logout = () => {
-    setToken(null);
-    localStorage.removeItem('token');
-  };
-
-  // Пока инициализируется auth–статус — можно показать спиннер
-  if (loading) return <p>Инициализация...</p>;
+    setAccess(null)
+    setRefresh(null)
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+  }
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ access, login, logout, initializing }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
