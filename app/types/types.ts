@@ -55,6 +55,12 @@ export interface RegisterRequest {
   password: string
 }
 
+export interface UpdateCartRequest {
+  items: Array<{
+    product_id: number
+    quantity: number
+  }>
+}
 
 export interface UpdateCartItemRequest {
   productId: number

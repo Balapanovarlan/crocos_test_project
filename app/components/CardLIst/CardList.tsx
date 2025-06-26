@@ -15,6 +15,7 @@ export type CardListProps =
       variant: 'cart'
       items: CartItem[]
       onRemoveItem: (id: number) => void
+      onQuantityChange?: (id:number , newQty: number) => void
     }
 
 export default function CardList(props: CardListProps) {
@@ -32,6 +33,7 @@ export default function CardList(props: CardListProps) {
             variant="cart"
             quantity={item.quantity}
             onRemove={() => props.onRemoveItem(item.id)}
+            onQuantityChange={props.onQuantityChange}
           />
         ))
       ) : (

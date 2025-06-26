@@ -32,6 +32,16 @@ export default function CartPage() {
     }
   }, [data])
 
+  const handleQuantityChange = (productId: number , newQuantity: number)=>{
+    setLocalItems(prev=>
+      prev.map(item => 
+        item.product.id === productId
+        ? {...item , quantity: newQuantity}
+        :item
+      )
+    )
+  } 
+
   const updateSingle = useMutation<CartItemResponse, Error, UpdateCartItemRequest>({
     mutationFn: ({ productId, quantity }) => fetchUpdateCartItem({ productId, quantity }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cart'] }),
@@ -76,8 +86,9 @@ export default function CartPage() {
           <h1 className='uppercase pb-1 border-b-1'>Shopping bag</h1>
           <CardList
             variant='cart'
-            items={cartItems}
+            items={localItems}
             onRemoveItem={handleRemove}
+            onQuantityChange = {handleQuantityChange}
           />
         </div>
 
