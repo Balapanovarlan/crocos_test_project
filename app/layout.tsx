@@ -7,6 +7,7 @@ import { useState } from "react";
 import SidebarMain from "./components/SidebarMain/SidebarMain";
 import { AuthProvider } from "./context/AuthContext";
 import { Providers } from "./providers";
+import Head from "next/head";
 
 const beatrice = localFont({
   src: "../public/fonts/beatrice-deck-trial/BeatriceDeckTRIAL.otf",
@@ -22,13 +23,20 @@ export default function RootLayout({
   const [isOpen, setIsOpen] = useState(false);
   return (
       <html lang="en">
+        <Head>
+          <link 
+            rel="preload"
+            href="/images/noisy_background.png"
+            as="image"
+            />
+        </Head>
         <body
-          className={`${beatrice.variable} antialiased bg-[url(../public/images/noisy_background.png)]`}
+          className={`${beatrice.variable} antialiased bg-[url(/images/noisy_background.png)] flex flex-col min-h-screen`}
         >
           <Providers>
             <Header setIsOpen={setIsOpen} />
             <SidebarMain isOpen={isOpen} setIsOpen={setIsOpen} />
-            <main className="pb-20">{children}</main>
+            <main className="flex-grow pb-20">{children}</main>
             <Footer />
           </Providers>
         </body>
