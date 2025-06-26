@@ -49,9 +49,16 @@ export interface CartItemResponse {
   quantity: number;
 }
 
-
 export interface RegisterRequest {
   username: string
   email: string
   password: string
 }
+
+
+export interface UpdateCartItemRequest {
+  productId: number
+  quantity: number
+}
+
+export type UpdateCartItemResponse = CartItem

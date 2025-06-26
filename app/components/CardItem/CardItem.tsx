@@ -1,6 +1,9 @@
 "use client";
 
 import { Product } from "@/app/types/product";
+import { AddToCartRequest } from "@/app/types/types";
+import { fetchAddToCart } from "@/app/utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -27,6 +30,18 @@ export default function CardItem({
 }: CardItemProps) {
   const [localQuantity, setLocalQuantity] = useState(quantity);
 
+  const queryClient = useQueryClient()
+
+    const addToCartMutation = useMutation(
+    {mutationFn: (payload: AddToCartRequest) => fetchAddToCart(payload),
+      onSuccess: ()=> {
+        queryClient.invalidateQueries({queryKey: ['cart']})
+      },
+      onError: (err: Error) => {
+        console.error('Add to cart failed', err)
+      }
+  })
+
   const handleIncrease = () => {
     const newQuantity = localQuantity + 1;
     setLocalQuantity(newQuantity);
@@ -41,8 +56,13 @@ export default function CardItem({
     }
   };
 
-  const addToCart = (id: number) => {
-    console.log(id);
+  const addToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addToCartMutation.mutate({
+      product_id: product.id,
+      quantity: localQuantity,
+    })
   };
 
   return (
@@ -95,10 +115,10 @@ export default function CardItem({
                   onClick={(e) => {
                     e.preventDefault(); // отменяем переход
                     e.stopPropagation(); // не даём событию всплыть к Link
-                    addToCart(product.id);
+                    addToCart(e);
                   }}
                 >
-                  Add to Cart
+                  {addToCartMutation.isPending ? 'Adding…' : 'Add to Cart'}
                 </button>
               )}
             </div>
@@ -114,7 +134,7 @@ export default function CardItem({
             )}
             <div className="flex flex-col border border-t-btn-gray">
               <button
-                className="px-2.5 py-2 border-b-1 hover:bg-gray-300 transition-colors ease-in-out"
+                className="px-2.5 py-2 border-b-1 hover:bg-gray-300 transition-colors ease-in-out cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation();
@@ -125,7 +145,7 @@ export default function CardItem({
               </button>
               <span className="px-2.5 py-2 border-b-1">{localQuantity}</span>
               <button
-                className="px-2.5 py-2 hover:bg-gray-300 transition-colors ease-in-out"
+                className="px-2.5 py-2 hover:bg-gray-300 transition-colors ease-in-out cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation();

@@ -5,7 +5,9 @@ import {
   RefreshRequest, RefreshResponse,
   RegisterRequest,
   Cart, AddToCartRequest, CartItemResponse,
-  Category, FilterOptions
+  Category, FilterOptions,
+  UpdateCartItemRequest,
+  UpdateCartItemResponse
 } from '../types/types'
 import { Product } from '../types/product'
 
@@ -62,7 +64,6 @@ privateApi.interceptors.response.use(
   }
 )
 
-// ============ сейчас ниже все ваши fetch-функции ============
 
 // Auth
 export const fetchLogin = (data: LoginRequest): Promise<LoginResponse> =>
@@ -83,7 +84,7 @@ export const fetchRefresh = (data: RefreshRequest): Promise<RefreshResponse> =>
 export const fetchAllCategories = (): Promise<Category[]> =>
   publicApi.get<Category[]>('/store/categories/').then(r => r.data)
 
-export const fetchAllProducts = (filters = {} as {
+export const fetchAllProducts = async (filters = {} as {
   category?: number; sizes?: string[]; color?: string[]; price_min?: number; price_max?: number
 }): Promise<Product[]> => {
   const params = new URLSearchParams()
@@ -108,10 +109,21 @@ export const fetchFilterOptions = (): Promise<FilterOptions> =>
   publicApi.get<FilterOptions>('/store/filter-options/').then(r => r.data)
 
 // Protected data
-export function fetchCart(): Promise<Cart> {
+export async function fetchCart(): Promise<Cart> {
   return privateApi.get<Cart>('/store/cart/').then(r => r.data)
 }
 
 export const fetchAddToCart = (payload: AddToCartRequest): Promise<CartItemResponse> =>
   privateApi.post<CartItemResponse>('/store/cart/add/', payload)
     .then(r => r.data)
+
+export const fetchUpdateCartItem = async ({
+  productId,
+  quantity
+}: UpdateCartItemRequest): Promise<UpdateCartItemResponse> => {
+  const { data } = await privateApi.patch<UpdateCartItemResponse>(
+    `/store/cart/update/${productId}/`,
+    { quantity }
+  )
+  return data
+}

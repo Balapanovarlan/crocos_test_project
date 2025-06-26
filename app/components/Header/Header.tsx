@@ -7,11 +7,14 @@ import Link from "next/link";
 
 export const Header = ({ setIsOpen }: HeaderProps) => {
   return (
-    <header className="py-7 px-4.5 relative">
+    <header className="py-7 px-4.5 relative font-beatrice">
       <div className="flex items-center justify-between">
-        <button onClick={() => setIsOpen(true)} className="cursor-pointer p-1">
-          <Image src={burgerMenuIcon} alt="Menu" />
-        </button>
+        <div className="flex items-center gap-4">
+          <button onClick={() => setIsOpen(true)} className="cursor-pointer p-1">
+            <Image src={burgerMenuIcon} alt="Menu" />
+          </button>
+          <Link href={'/products'}>Products</Link>
+        </div>
         <Link href="/" className="absolute left-1/2 transform -translate-x-1/2">
           <Image src={logo} alt="Logo" width={29} height={29} />
         </Link>
