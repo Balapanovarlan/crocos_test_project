@@ -26,13 +26,10 @@ export default function RegisterPage() {
 
   const onSubmit = async ({ username, password }: RegisterForm) => {
     try {
-      // 1) Регистрируем пользователя
       await fetchRegister({ username, password } as RegisterRequest)
 
-      // 2) Автоматически логинимся тем же username/password
       await login(username, password)
 
-      // 3) Переходим куда нужно
       router.push('/')
     } catch (e: any) {
       setError(e.message || 'Registration failed')

@@ -36,7 +36,7 @@ export default function RootLayout({
           <Providers>
             <Header setIsOpen={setIsOpen} />
             <SidebarMain isOpen={isOpen} setIsOpen={setIsOpen} />
-            <main className="flex-grow pb-20">{children}</main>
+            <main className="flex justify-center items-center flex-grow pt-7 pb-10 xm:pt-14 xm:pb-20">{children}</main>
             <Footer />
           </Providers>
         </body>

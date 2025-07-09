@@ -12,6 +12,7 @@ import { Category } from '../types/types'
 import { fetchAllCategories, fetchAllProducts } from '../utils/axios'
 import { Product } from '../types/product'
 import { useSearchParams } from 'next/navigation'
+import { FullScreenLoader } from '../components/FullLoader/FullLoader'
 
 export default function Products() {
 
@@ -41,7 +42,7 @@ export default function Products() {
     }); 
   
 
-  if (categoriesIsLoading || productsIsLoading) return <p>Loading…</p>
+  if (categoriesIsLoading || productsIsLoading) return <FullScreenLoader/>
   if (categoriesIsLoading || productsIsLoading)   return <p>Error loading categories</p>
 
   return (
@@ -101,7 +102,7 @@ export default function Products() {
 
           {/* ——— CARD LIST ——— */}
           {filtersOpen&& (
-            <section className="w-1/2 xm:px-4 py-6 xm:w-auto">
+            <section className="w-1/2 xm:px-4 py-6 xm:w-full xm:max-w-[843px]">
               <CardList items={products} variant='products' />
             </section>
           )}

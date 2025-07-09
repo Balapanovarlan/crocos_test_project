@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchSearchResult } from "../utils/axios"
 import CardList from "../components/CardLIst/CardList"
 import Search from "../components/Search/Search"
+import { FullScreenLoader } from "../components/FullLoader/FullLoader"
 
 export default function SearchPage() {
   const params = useSearchParams()
@@ -20,7 +21,7 @@ export default function SearchPage() {
 		if (!q) return <p className="flex justify-center">Type something to search</p>
 
 		if (isLoading) {
-			return <p>Loading</p>
+			return <FullScreenLoader/>
 		}
  
 		if (isError) {

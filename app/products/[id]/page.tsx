@@ -1,5 +1,6 @@
 "use client";
 
+import { FullScreenLoader } from "@/app/components/FullLoader/FullLoader";
 import { Product } from "@/app/types/product";
 import { fetchProductDetail } from "@/app/utils/axios";
 import { useQuery } from "@tanstack/react-query";
@@ -19,7 +20,7 @@ export default function productDetail() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (isLoading) {
-    return <p>Loading</p>
+    return <FullScreenLoader/>
   }
 
   if (isError) {
@@ -29,14 +30,13 @@ export default function productDetail() {
   return (
     <div className="container m-auto font-beatrice flex flex-col gap-10 xm:gap-25 items-center xm:flex-row xm:justify-center xm:pt-10">
       <div className="flex flex-col xm:flex-row gap-4">
-        <div className="w-full min-w-[400px] min-h-[400px]  max-w-[500px] relative ">
           <Image
             src={productDetail!.images[activeIndex].image}
             alt='Selected image'
-            fill
-            className="object-contain"
+            width={400}
+            height={700}
+            className="p-4"
           />
-        </div>
 
         {/* Лента миниатюр */}
         <div className="flex xm:flex-col items-center justify-center gap-2">

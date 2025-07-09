@@ -8,6 +8,7 @@ import CardList from '../components/CardLIst/CardList'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { Cart, CartItem, CartItemResponse, UpdateCartItemRequest } from '../types/types'
+import { FullScreenLoader } from '../components/FullLoader/FullLoader'
 
 export default function CartPage() {
   const { access: token, initializing } = useAuth()
@@ -47,7 +48,7 @@ export default function CartPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cart'] }),
   })
 
-  if (initializing || isLoading) return <p>Loading…</p>
+  if (initializing || isLoading) return <FullScreenLoader/>
   if (isError || !data) return <p>Error loading cart</p>
 
   const cartItems: CartItem[] = data.items
