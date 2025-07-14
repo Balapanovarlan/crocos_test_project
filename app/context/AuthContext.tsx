@@ -3,6 +3,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react'
 import { fetchLogin, fetchRefresh } from '../utils/axios'
 import { LoginRequest, LoginResponse } from '../types/types'
+import { useRouter } from 'next/navigation'
 
 interface AuthContextType {
   access: string | null
@@ -17,6 +18,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [access, setAccess] = useState<string | null>(null)
   const [refresh, setRefresh] = useState<string | null>(null)
   const [initializing, setInitializing] = useState(true)
+
+  const router  = useRouter()
 
   // При старте читаем их из localStorage
   useEffect(() => {
@@ -65,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setRefresh(null)
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    router.push('/');
   }
 
   return (
